@@ -23,7 +23,7 @@ local EditorBody = function(type,gravityScale,sleep)
         sleep = sleep,
         fixtures = {},
         linearDamping = 0,
-        linearVelocity = 0,
+        angularDamping = 0,
         fixedRotation = false,
         userData = nil
     }
@@ -49,15 +49,10 @@ end
 local EditorResourceManager = class("EditorResourceManager")
 
 function EditorResourceManager:init()
-    self.PixelMeterScale = 64
     self.Worlds = {}
     self.Bodies = {}
     self.Fixtures = {}
     self.Shapes = {}
-end
-
-function EditorResourceManager:SetPixelMeterScale(pixels)
-    self.PixelMeterScale = pixels
 end
 
 function EditorResourceManager:HasWorld(name)
@@ -164,13 +159,29 @@ function EditorResourceManager:DeleteShape(name)
     self.Shapes[name] = nil
 end
 
-
-
-
+-------------------------------------------------------
+--____________________EDITOR_________________________--
+--[[
+    distPx = math.floor(get_distance(pointA,pointB))
+    distM = distPx / pixelMeterScale
+    local str = "Px: " .. tostring(distPx) -- pixel
+    str = str .. "\nM: " .. tostring(distM) -- meter
+    str = str .. "\nCM: " .. tostring(distM * 100) -- centimeter
+    str = str .. "\nMM: " .. tostring(distM * 1000) -- millimeter
+    str = str .. "\nYD: " .. tostring(distM * 1.09361) -- yard
+    str = str .. "\nFT: " .. tostring(distM * 3.28084) -- foot
+    str = str .. "\nIN: " .. tostring(distM * 39.3701) -- inch
+]]
 local Editor = class("Editor")
 
 function Editor:init()
-    self.resources = EditorResourceManager()
+    self.Resources = EditorResourceManager()
+
+    self.pixelMeterScale = 64
+end
+
+function Editor:SetPixelMeterScale(pixels)
+    self.pixelMeterScale = pixels
 end
 
 return Editor
